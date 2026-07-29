@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="350" viewBox="0 0 960 350" role="img" aria-label="GitHub Trophies Circle View">
+  <defs>
+    <linearGradient id="bg" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0%" stop-color="#07101f" />
+      <stop offset="100%" stop-color="#0f172a" />
+    </linearGradient>
+    <linearGradient id="accentA" x1="0" x2="1" y1="0" y2="0">
+      <stop offset="0%" stop-color="#22d3ee" />
+      <stop offset="100%" stop-color="#34d399" />
+    </linearGradient>
+    <linearGradient id="accentB" x1="0" x2="1" y1="0" y2="0">
+      <stop offset="0%" stop-color="#f59e0b" />
+      <stop offset="100%" stop-color="#ef4444" />
+    </linearGradient>
+    <linearGradient id="accentC" x1="0" x2="1" y1="0" y2="0">
+      <stop offset="0%" stop-color="#a78bfa" />
+      <stop offset="100%" stop-color="#38bdf8" />
+    </linearGradient>
+    <filter id="soft">
+      <feDropShadow dx="0" dy="10" stdDeviation="12" flood-color="#000" flood-opacity="0.35" />
+    </filter>
+  </defs>
+  <rect width="100%" height="100%" rx="24" fill="url(#bg)" />
+  <rect x="20" y="20" width="920" height="310" rx="22" fill="#101b2f" stroke="rgba(148,163,184,0.25)" filter="url(#soft)" />
+  <rect x="46" y="46" width="132" height="4" rx="2" fill="url(#accentA)" />
+  <text x="46" y="84" fill="#f8fafc" font-family="Segoe UI, Inter, Arial, sans-serif" font-size="30" font-weight="700">GitHub Trophies Circle View</text>
+  <text x="46" y="112" fill="#8aa0b8" font-family="Segoe UI, Inter, Arial, sans-serif" font-size="14">Professional profile highlights in a circular layout</text>
+  
+    
+    <g>
+      <circle cx="220" cy="220" r="66" fill="none" stroke="rgba(148,163,184,0.18)" stroke-width="12" />
+      <circle cx="220" cy="220" r="66" fill="none" stroke="url(#accentB)" stroke-width="12" stroke-linecap="round" transform="rotate(-90 220 220)" stroke-dasharray="414.6902302738527 414.6902302738527" />
+      <text x="220" y="228" text-anchor="middle" fill="#e2e8f0" font-family="Segoe UI, Inter, Arial, sans-serif" font-size="34" font-weight="700">100</text>
+      <text x="220" y="252" text-anchor="middle" fill="#8aa0b8" font-family="Segoe UI, Inter, Arial, sans-serif" font-size="12" letter-spacing="0.06em">ACHIEVEMENT SCORE</text>
+    </g>
+    
+    <g>
+      <circle cx="480" cy="220" r="66" fill="none" stroke="rgba(148,163,184,0.18)" stroke-width="12" />
+      <circle cx="480" cy="220" r="66" fill="none" stroke="url(#accentA)" stroke-width="12" stroke-linecap="round" transform="rotate(-90 480 220)" stroke-dasharray="4.1469023027385274 414.6902302738527" />
+      <text x="480" y="228" text-anchor="middle" fill="#e2e8f0" font-family="Segoe UI, Inter, Arial, sans-serif" font-size="34" font-weight="700">1</text>
+      <text x="480" y="252" text-anchor="middle" fill="#8aa0b8" font-family="Segoe UI, Inter, Arial, sans-serif" font-size="12" letter-spacing="0.06em">BEST REPO STARS</text>
+    </g>
+    
+    <g>
+      <circle cx="740" cy="220" r="66" fill="none" stroke="rgba(148,163,184,0.18)" stroke-width="12" />
+      <circle cx="740" cy="220" r="66" fill="none" stroke="url(#accentC)" stroke-width="12" stroke-linecap="round" transform="rotate(-90 740 220)" stroke-dasharray="0 414.6902302738527" />
+      <text x="740" y="228" text-anchor="middle" fill="#e2e8f0" font-family="Segoe UI, Inter, Arial, sans-serif" font-size="34" font-weight="700">0</text>
+      <text x="740" y="252" text-anchor="middle" fill="#8aa0b8" font-family="Segoe UI, Inter, Arial, sans-serif" font-size="12" letter-spacing="0.06em">FOLLOWERS</text>
+    </g>
+    <text x="46" y="310" fill="#8aa0b8" font-family="Segoe UI, Inter, Arial, sans-serif" font-size="13">If any value is zero, it is shown as 0 (not hidden).</text>
+  
+</svg>

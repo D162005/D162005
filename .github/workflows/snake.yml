@@ -28,6 +28,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_PROFILE_USERNAME: D162005
+          LEETCODE_USERNAME: D_16
 
       - name: Generate snake animation
         uses: Platane/snk@v3

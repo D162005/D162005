@@ -2,23 +2,24 @@ const { mkdirSync, writeFileSync } = require('fs');
 const { join } = require('path');
 
 const username = process.env.GITHUB_PROFILE_USERNAME || 'D162005';
+const leetcodeUsername = process.env.LEETCODE_USERNAME || 'D_16';
 const token = process.env.GITHUB_TOKEN || '';
 const ownerRepo = process.env.GITHUB_REPOSITORY || 'D162005/D162005';
 
 const outDir = join(process.cwd(), 'dist', 'assets');
 mkdirSync(outDir, { recursive: true });
 
-const headers = {
+const githubHeaders = {
   'User-Agent': 'readme-assets-generator',
   Accept: 'application/vnd.github+json',
 };
 
 if (token) {
-  headers.Authorization = `Bearer ${token}`;
+  githubHeaders.Authorization = `Bearer ${token}`;
 }
 
 async function githubGet(path) {
-  const response = await fetch(`https://api.github.com${path}`, { headers });
+  const response = await fetch(`https://api.github.com${path}`, { headers: githubHeaders });
   if (!response.ok) {
     throw new Error(`GitHub API failed for ${path}: ${response.status} ${response.statusText}`);
   }
@@ -28,23 +29,77 @@ async function githubGet(path) {
 async function githubGetAll(path) {
   const items = [];
   let page = 1;
-
   while (true) {
     const separator = path.includes('?') ? '&' : '?';
     const chunk = await githubGet(`${path}${separator}per_page=100&page=${page}`);
     if (!Array.isArray(chunk) || chunk.length === 0) {
       break;
     }
-
     items.push(...chunk);
     if (chunk.length < 100) {
       break;
     }
-
     page += 1;
   }
-
   return items;
+}
+
+async function getLeetCodeStats(name) {
+  const query = `
+    query userProfile($username: String!) {
+      matchedUser(username: $username) {
+        profile {
+          ranking
+          reputation
+          starRating
+        }
+        submitStatsGlobal {
+          acSubmissionNum {
+            difficulty
+            count
+          }
+        }
+      }
+    }
+  `;
+
+  try {
+    const response = await fetch('https://leetcode.com/graphql', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Referer: `https://leetcode.com/${name}/`,
+      },
+      body: JSON.stringify({ query, variables: { username: name } }),
+    });
+
+    if (!response.ok) {
+      throw new Error(`LeetCode request failed: ${response.status}`);
+    }
+
+    const json = await response.json();
+    const user = json?.data?.matchedUser;
+    const list = user?.submitStatsGlobal?.acSubmissionNum || [];
+    const byDifficulty = new Map(list.map((entry) => [entry.difficulty, entry.count]));
+
+    return {
+      total: byDifficulty.get('All') || 0,
+      easy: byDifficulty.get('Easy') || 0,
+      medium: byDifficulty.get('Medium') || 0,
+      hard: byDifficulty.get('Hard') || 0,
+      ranking: user?.profile?.ranking || 0,
+      reputation: user?.profile?.reputation || 0,
+    };
+  } catch {
+    return {
+      total: 0,
+      easy: 0,
+      medium: 0,
+      hard: 0,
+      ranking: 0,
+      reputation: 0,
+    };
+  }
 }
 
 function escapeXml(value) {
@@ -57,156 +112,241 @@ function escapeXml(value) {
 }
 
 function formatNumber(value) {
-  return new Intl.NumberFormat('en-US').format(value);
+  return new Intl.NumberFormat('en-US').format(value || 0);
 }
 
 function truncate(value, limit) {
+  if (!value) {
+    return '';
+  }
   if (value.length <= limit) {
     return value;
   }
-  return `${value.slice(0, limit - 1)}…`;
+  return `${value.slice(0, limit - 1)}...`;
 }
 
-function svgShell(width, height, title, subtitle, body) {
+function percentOf(value, max) {
+  if (!max || max <= 0) {
+    return 0;
+  }
+  return Math.max(0, Math.min(100, Math.round((value / max) * 100)));
+}
+
+function ringProgress(cx, cy, radius, percent, color, valueText, labelText, id) {
+  const circumference = 2 * Math.PI * radius;
+  const dash = (Math.max(0, Math.min(100, percent)) / 100) * circumference;
+  return `
+    <g>
+      <circle cx="${cx}" cy="${cy}" r="${radius}" fill="none" stroke="rgba(148,163,184,0.18)" stroke-width="12" />
+      <circle cx="${cx}" cy="${cy}" r="${radius}" fill="none" stroke="url(#${id})" stroke-width="12" stroke-linecap="round" transform="rotate(-90 ${cx} ${cy})" stroke-dasharray="${dash} ${circumference}" />
+      <text x="${cx}" y="${cy + 8}" text-anchor="middle" fill="#e2e8f0" font-family="Segoe UI, Inter, Arial, sans-serif" font-size="34" font-weight="700">${escapeXml(valueText)}</text>
+      <text x="${cx}" y="${cy + 32}" text-anchor="middle" fill="#8aa0b8" font-family="Segoe UI, Inter, Arial, sans-serif" font-size="12" letter-spacing="0.06em">${escapeXml(labelText.toUpperCase())}</text>
+    </g>`;
+}
+
+function shell(title, subtitle, body, height = 330) {
   return `<?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}" role="img" aria-label="${escapeXml(title)}">
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="${height}" viewBox="0 0 960 ${height}" role="img" aria-label="${escapeXml(title)}">
   <defs>
     <linearGradient id="bg" x1="0" x2="1" y1="0" y2="1">
-      <stop offset="0%" stop-color="#0b1220" />
-      <stop offset="100%" stop-color="#0f1729" />
+      <stop offset="0%" stop-color="#07101f" />
+      <stop offset="100%" stop-color="#0f172a" />
     </linearGradient>
-    <linearGradient id="accent" x1="0" x2="1" y1="0" y2="0">
-      <stop offset="0%" stop-color="#38bdf8" />
+    <linearGradient id="accentA" x1="0" x2="1" y1="0" y2="0">
+      <stop offset="0%" stop-color="#22d3ee" />
       <stop offset="100%" stop-color="#34d399" />
     </linearGradient>
-    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
-      <feDropShadow dx="0" dy="12" stdDeviation="18" flood-color="#000000" flood-opacity="0.35" />
+    <linearGradient id="accentB" x1="0" x2="1" y1="0" y2="0">
+      <stop offset="0%" stop-color="#f59e0b" />
+      <stop offset="100%" stop-color="#ef4444" />
+    </linearGradient>
+    <linearGradient id="accentC" x1="0" x2="1" y1="0" y2="0">
+      <stop offset="0%" stop-color="#a78bfa" />
+      <stop offset="100%" stop-color="#38bdf8" />
+    </linearGradient>
+    <filter id="soft">
+      <feDropShadow dx="0" dy="10" stdDeviation="12" flood-color="#000" flood-opacity="0.35" />
     </filter>
   </defs>
   <rect width="100%" height="100%" rx="24" fill="url(#bg)" />
-  <rect x="24" y="24" width="${width - 48}" height="${height - 48}" rx="20" fill="#111827" stroke="rgba(148,163,184,0.16)" filter="url(#shadow)" />
-  <rect x="48" y="42" width="120" height="4" rx="2" fill="url(#accent)" />
-  <text x="48" y="78" fill="#e5eef7" font-family="Segoe UI, Inter, Arial, sans-serif" font-size="28" font-weight="700">${escapeXml(title)}</text>
-  <text x="48" y="108" fill="#8aa0b8" font-family="Segoe UI, Inter, Arial, sans-serif" font-size="14">${escapeXml(subtitle)}</text>
+  <rect x="20" y="20" width="920" height="${height - 40}" rx="22" fill="#101b2f" stroke="rgba(148,163,184,0.25)" filter="url(#soft)" />
+  <rect x="46" y="46" width="132" height="4" rx="2" fill="url(#accentA)" />
+  <text x="46" y="84" fill="#f8fafc" font-family="Segoe UI, Inter, Arial, sans-serif" font-size="30" font-weight="700">${escapeXml(title)}</text>
+  <text x="46" y="112" fill="#8aa0b8" font-family="Segoe UI, Inter, Arial, sans-serif" font-size="14">${escapeXml(subtitle)}</text>
   ${body}
 </svg>`;
 }
 
-function cardLabel(x, y, label, value, color = '#7dd3fc') {
-  return `
-    <text x="${x}" y="${y}" fill="#8aa0b8" font-family="Segoe UI, Inter, Arial, sans-serif" font-size="12" letter-spacing="0.04em">${escapeXml(label.toUpperCase())}</text>
-    <text x="${x}" y="${y + 40}" fill="${color}" font-family="Segoe UI, Inter, Arial, sans-serif" font-size="28" font-weight="700">${escapeXml(value)}</text>`;
+function buildStatsSvg(context) {
+  const { user, publicRepos, totalStars, totalForks } = context;
+  const maxValue = Math.max(user.public_repos || 0, user.followers || 0, totalStars || 0, totalForks || 0, 1);
+  const body = `
+    ${ringProgress(160, 220, 62, percentOf(user.public_repos || 0, maxValue), '#22d3ee', formatNumber(user.public_repos || 0), 'Public Repos', 'accentA')}
+    ${ringProgress(390, 220, 62, percentOf(user.followers || 0, maxValue), '#a78bfa', formatNumber(user.followers || 0), 'Followers', 'accentC')}
+    ${ringProgress(620, 220, 62, percentOf(totalStars || 0, maxValue), '#34d399', formatNumber(totalStars || 0), 'Total Stars', 'accentA')}
+    ${ringProgress(850, 220, 62, percentOf(totalForks || 0, maxValue), '#f59e0b', formatNumber(totalForks || 0), 'Total Forks', 'accentB')}
+  `;
+  return shell('Professional GitHub Snapshot', `${ownerRepo} key metrics`, body, 330);
+}
+
+function buildLanguagesSvg(context) {
+  const sortedLanguages = context.sortedLanguages.slice(0, 6);
+  const totalLanguageBytes = context.totalLanguageBytes;
+  const rows = sortedLanguages.length > 0
+    ? sortedLanguages.map(([language, bytes], index) => {
+      const rowY = 146 + index * 28;
+      const barWidth = Math.max(14, Math.round((bytes / Math.max(totalLanguageBytes, 1)) * 540));
+      const pct = percentOf(bytes, Math.max(totalLanguageBytes, 1));
+      const colors = ['#22d3ee', '#34d399', '#a78bfa', '#f59e0b', '#fb7185', '#60a5fa'];
+      return `
+      <g>
+        <circle cx="64" cy="${rowY - 5}" r="8" fill="${colors[index % colors.length]}" />
+        <text x="84" y="${rowY}" fill="#e2e8f0" font-family="Segoe UI, Inter, Arial, sans-serif" font-size="16" font-weight="600">${escapeXml(language)}</text>
+        <rect x="250" y="${rowY - 14}" width="560" height="12" rx="6" fill="rgba(148,163,184,0.22)"/>
+        <rect x="250" y="${rowY - 14}" width="${barWidth}" height="12" rx="6" fill="${colors[index % colors.length]}"/>
+        <text x="826" y="${rowY}" fill="#8aa0b8" font-family="Segoe UI, Inter, Arial, sans-serif" font-size="13">${pct}%</text>
+      </g>`;
+    }).join('')
+    : '<text x="46" y="176" fill="#8aa0b8" font-family="Segoe UI, Inter, Arial, sans-serif" font-size="18">No language data available.</text>';
+
+  const body = `
+    <text x="46" y="136" fill="#34d399" font-family="Segoe UI, Inter, Arial, sans-serif" font-size="13" font-weight="700" letter-spacing="0.08em">ATTENTION RADAR</text>
+    ${rows}
+  `;
+
+  return shell('Top Languages Spotlight', 'Most used languages across your repositories', body, 340);
+}
+
+function buildTrophiesSvg(context) {
+  const { user, totalStars, totalForks, topRepo } = context;
+  const trophyScore = Math.max(0, Math.min(100, (totalStars * 12) + (totalForks * 4) + (user.followers || 0)));
+  const bestRepoStars = topRepo ? topRepo.stargazers_count || 0 : 0;
+  const maxValue = Math.max(trophyScore, bestRepoStars, user.followers || 0, 1);
+
+  const body = `
+    ${ringProgress(220, 220, 66, percentOf(trophyScore, maxValue), '#f59e0b', formatNumber(trophyScore), 'Achievement Score', 'accentB')}
+    ${ringProgress(480, 220, 66, percentOf(bestRepoStars, maxValue), '#34d399', formatNumber(bestRepoStars), 'Best Repo Stars', 'accentA')}
+    ${ringProgress(740, 220, 66, percentOf(user.followers || 0, maxValue), '#38bdf8', formatNumber(user.followers || 0), 'Followers', 'accentC')}
+    <text x="46" y="310" fill="#8aa0b8" font-family="Segoe UI, Inter, Arial, sans-serif" font-size="13">If any value is zero, it is shown as 0 (not hidden).</text>
+  `;
+
+  return shell('GitHub Trophies Circle View', 'Professional profile highlights in a circular layout', body, 350);
+}
+
+function buildRepoSvg(context) {
+  const topTwo = context.rankableRepos.slice(0, 2);
+  const cards = [0, 1].map((index) => {
+    const repo = topTwo[index];
+    const x = 46 + (index * 438);
+    if (!repo) {
+      return `
+      <g>
+        <rect x="${x}" y="138" width="412" height="142" rx="16" fill="#0d1628" stroke="rgba(148,163,184,0.25)" />
+        <text x="${x + 20}" y="186" fill="#8aa0b8" font-family="Segoe UI, Inter, Arial, sans-serif" font-size="16">Not achieved yet.</text>
+      </g>`;
+    }
+
+    return `
+    <g>
+      <rect x="${x}" y="138" width="412" height="142" rx="16" fill="#0d1628" stroke="rgba(148,163,184,0.25)" />
+      <text x="${x + 20}" y="172" fill="#e2e8f0" font-family="Segoe UI, Inter, Arial, sans-serif" font-size="22" font-weight="700">${escapeXml(truncate(repo.name, 24))}</text>
+      <text x="${x + 20}" y="198" fill="#8aa0b8" font-family="Segoe UI, Inter, Arial, sans-serif" font-size="13">${escapeXml(truncate(repo.description || 'No description provided.', 48))}</text>
+      <text x="${x + 20}" y="232" fill="#34d399" font-family="Segoe UI, Inter, Arial, sans-serif" font-size="13" font-weight="700">${formatNumber(repo.stargazers_count || 0)} stars</text>
+      <text x="${x + 128}" y="232" fill="#60a5fa" font-family="Segoe UI, Inter, Arial, sans-serif" font-size="13">${escapeXml(repo.language || 'Unknown')}</text>
+      <text x="${x + 250}" y="232" fill="#94a3b8" font-family="Segoe UI, Inter, Arial, sans-serif" font-size="13">${new Date(repo.updated_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</text>
+    </g>`;
+  }).join('');
+
+  return shell('Top Contribution Repositories', 'Two compact featured repositories', cards, 320);
+}
+
+function buildLeetCodeSvg(stats) {
+  const total = stats.total || 0;
+  const easy = stats.easy || 0;
+  const medium = stats.medium || 0;
+  const hard = stats.hard || 0;
+  const goal = Math.max(300, total + 20);
+  const completion = percentOf(total, goal);
+
+  const body = `
+    ${ringProgress(180, 220, 70, completion, '#f59e0b', formatNumber(total), 'Solved', 'accentB')}
+    <g>
+      <text x="330" y="170" fill="#34d399" font-family="Segoe UI, Inter, Arial, sans-serif" font-size="13" font-weight="700">EASY</text>
+      <rect x="330" y="178" width="520" height="12" rx="6" fill="rgba(148,163,184,0.2)"/>
+      <rect x="330" y="178" width="${Math.max(8, percentOf(easy, Math.max(total, 1)) * 5.2)}" height="12" rx="6" fill="#34d399"/>
+      <text x="860" y="188" text-anchor="end" fill="#e2e8f0" font-family="Segoe UI, Inter, Arial, sans-serif" font-size="13">${formatNumber(easy)}</text>
+
+      <text x="330" y="220" fill="#fbbf24" font-family="Segoe UI, Inter, Arial, sans-serif" font-size="13" font-weight="700">MEDIUM</text>
+      <rect x="330" y="228" width="520" height="12" rx="6" fill="rgba(148,163,184,0.2)"/>
+      <rect x="330" y="228" width="${Math.max(8, percentOf(medium, Math.max(total, 1)) * 5.2)}" height="12" rx="6" fill="#fbbf24"/>
+      <text x="860" y="238" text-anchor="end" fill="#e2e8f0" font-family="Segoe UI, Inter, Arial, sans-serif" font-size="13">${formatNumber(medium)}</text>
+
+      <text x="330" y="270" fill="#f87171" font-family="Segoe UI, Inter, Arial, sans-serif" font-size="13" font-weight="700">HARD</text>
+      <rect x="330" y="278" width="520" height="12" rx="6" fill="rgba(148,163,184,0.2)"/>
+      <rect x="330" y="278" width="${Math.max(8, percentOf(hard, Math.max(total, 1)) * 5.2)}" height="12" rx="6" fill="#f87171"/>
+      <text x="860" y="288" text-anchor="end" fill="#e2e8f0" font-family="Segoe UI, Inter, Arial, sans-serif" font-size="13">${formatNumber(hard)}</text>
+    </g>
+    <text x="46" y="312" fill="#8aa0b8" font-family="Segoe UI, Inter, Arial, sans-serif" font-size="13">Ranking: ${stats.ranking ? formatNumber(stats.ranking) : 'Not available'} | Reputation: ${stats.reputation ? formatNumber(stats.reputation) : 'Not available'}</text>
+  `;
+
+  return shell('LeetCode Progress Dashboard', `${leetcodeUsername} challenge overview`, body, 350);
 }
 
 async function build() {
   const user = await githubGet(`/users/${username}`);
   const repos = await githubGetAll(`/users/${username}/repos?type=owner&sort=pushed`);
   const publicRepos = repos.filter((repo) => !repo.fork && !repo.archived);
+  const sourceRepos = publicRepos.length > 0 ? publicRepos : repos;
 
-  const repoDetails = publicRepos.length > 0 ? publicRepos : repos;
   const languageTotals = new Map();
-
-  for (const repo of repoDetails) {
+  for (const repo of sourceRepos) {
     if (!repo.languages_url) {
       continue;
     }
-
     try {
-      const languages = await githubGet(repo.languages_url.replace('https://api.github.com', ''));
+      const path = repo.languages_url.replace('https://api.github.com', '');
+      const languages = await githubGet(path);
       for (const [language, bytes] of Object.entries(languages)) {
         languageTotals.set(language, (languageTotals.get(language) || 0) + bytes);
       }
     } catch {
-      // Skip a repo if its language endpoint fails; the rest of the card still renders.
+      // Keep rendering even if one repository language endpoint fails.
     }
   }
 
   const sortedLanguages = [...languageTotals.entries()].sort((a, b) => b[1] - a[1]);
   const totalLanguageBytes = sortedLanguages.reduce((sum, [, bytes]) => sum + bytes, 0);
+  const totalStars = sourceRepos.reduce((sum, repo) => sum + (repo.stargazers_count || 0), 0);
+  const totalForks = sourceRepos.reduce((sum, repo) => sum + (repo.forks_count || 0), 0);
 
-  const totalStars = publicRepos.reduce((sum, repo) => sum + repo.stargazers_count, 0);
-  const totalForks = publicRepos.reduce((sum, repo) => sum + repo.forks_count, 0);
-  const topRepo = [...publicRepos].sort((a, b) => {
-    if (b.stargazers_count !== a.stargazers_count) {
-      return b.stargazers_count - a.stargazers_count;
+  const rankableRepos = [...sourceRepos].sort((a, b) => {
+    if ((b.stargazers_count || 0) !== (a.stargazers_count || 0)) {
+      return (b.stargazers_count || 0) - (a.stargazers_count || 0);
     }
-    if (b.forks_count !== a.forks_count) {
-      return b.forks_count - a.forks_count;
+    if ((b.forks_count || 0) !== (a.forks_count || 0)) {
+      return (b.forks_count || 0) - (a.forks_count || 0);
     }
     return new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime();
-  })[0];
+  });
 
-  const statsSvg = svgShell(
-    960,
-    280,
-    'GitHub Stats',
-    `${ownerRepo} profile snapshot`,
-    `
-      ${cardLabel(58, 152, 'Public repos', formatNumber(user.public_repos || 0))}
-      ${cardLabel(288, 152, 'Followers', formatNumber(user.followers || 0), '#a78bfa')}
-      ${cardLabel(518, 152, 'Stars', formatNumber(totalStars || 0), '#34d399')}
-      ${cardLabel(748, 152, 'Forks', formatNumber(totalForks || 0), '#fbbf24')}
-    `
-  );
+  const context = {
+    user,
+    publicRepos: sourceRepos,
+    totalStars,
+    totalForks,
+    sortedLanguages,
+    totalLanguageBytes,
+    rankableRepos,
+    topRepo: rankableRepos[0],
+  };
 
-  const languageRows = sortedLanguages.slice(0, 5);
-  const languageBody = languageRows.length > 0
-    ? languageRows.map(([language, bytes], index) => {
-      const y = 152 + index * 36;
-      const percent = totalLanguageBytes === 0 ? 0 : Math.round((bytes / totalLanguageBytes) * 100);
-      const barWidth = Math.max(8, Math.round((bytes / totalLanguageBytes) * 580));
-      const colors = ['#38bdf8', '#34d399', '#a78bfa', '#fbbf24', '#fb7185'];
-      return `
-        <text x="58" y="${y}" fill="#e5eef7" font-family="Segoe UI, Inter, Arial, sans-serif" font-size="18" font-weight="600">${escapeXml(language)}</text>
-        <text x="318" y="${y}" fill="#8aa0b8" font-family="Segoe UI, Inter, Arial, sans-serif" font-size="14">${percent}%</text>
-        <rect x="58" y="${y + 10}" width="580" height="10" rx="5" fill="#1f2937" />
-        <rect x="58" y="${y + 10}" width="${barWidth}" height="10" rx="5" fill="${colors[index % colors.length]}" />
-        <text x="652" y="${y + 20}" fill="#8aa0b8" font-family="Segoe UI, Inter, Arial, sans-serif" font-size="12">${formatNumber(bytes)} bytes</text>`;
-    }).join('')
-    : `<text x="58" y="166" fill="#8aa0b8" font-family="Segoe UI, Inter, Arial, sans-serif" font-size="18">No language data yet.</text>`;
+  const leetCodeStats = await getLeetCodeStats(leetcodeUsername);
 
-  const languagesSvg = svgShell(
-    960,
-    280,
-    'Top Languages',
-    `${ownerRepo} language usage`,
-    languageBody
-  );
-
-  const trophySvg = svgShell(
-    960,
-    280,
-    'GitHub Trophies',
-    'Professional profile highlights',
-    `
-      ${cardLabel(58, 152, 'Trophies earned', totalStars > 0 ? formatNumber(Math.min(totalStars, 12)) : '0', totalStars > 0 ? '#fbbf24' : '#94a3b8')}
-      ${cardLabel(318, 152, 'Most starred repo', topRepo ? formatNumber(topRepo.stargazers_count) : 'Not achieved yet', topRepo ? '#34d399' : '#94a3b8')}
-      ${cardLabel(618, 152, 'Followers', formatNumber(user.followers || 0), '#38bdf8')}
-      <text x="58" y="228" fill="#8aa0b8" font-family="Segoe UI, Inter, Arial, sans-serif" font-size="13">If a metric is still zero, it is shown as 0 instead of hiding the result.</text>
-    `
-  );
-
-  const featuredRepo = topRepo || publicRepos[0];
-  const repoSvg = svgShell(
-    960,
-    280,
-    'Top Contributed Repo',
-    'Featured public repository',
-    featuredRepo
-      ? `
-          <text x="58" y="152" fill="#e5eef7" font-family="Segoe UI, Inter, Arial, sans-serif" font-size="26" font-weight="700">${escapeXml(truncate(featuredRepo.name, 30))}</text>
-          <text x="58" y="184" fill="#8aa0b8" font-family="Segoe UI, Inter, Arial, sans-serif" font-size="15">${escapeXml(truncate(featuredRepo.description || 'No description provided.', 72))}</text>
-          <text x="58" y="224" fill="#34d399" font-family="Segoe UI, Inter, Arial, sans-serif" font-size="14" font-weight="600">${formatNumber(featuredRepo.stargazers_count || 0)} stars</text>
-          <text x="188" y="224" fill="#8aa0b8" font-family="Segoe UI, Inter, Arial, sans-serif" font-size="14">${escapeXml((featuredRepo.language || 'Unknown'))}</text>
-          <text x="320" y="224" fill="#8aa0b8" font-family="Segoe UI, Inter, Arial, sans-serif" font-size="14">Updated ${new Date(featuredRepo.updated_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</text>
-        `
-      : `<text x="58" y="166" fill="#8aa0b8" font-family="Segoe UI, Inter, Arial, sans-serif" font-size="18">Not achieved yet.</text>`
-  );
-
-  writeFileSync(join(outDir, 'github-stats.svg'), statsSvg);
-  writeFileSync(join(outDir, 'top-languages.svg'), languagesSvg);
-  writeFileSync(join(outDir, 'github-trophies.svg'), trophySvg);
-  writeFileSync(join(outDir, 'top-contributed-repo.svg'), repoSvg);
+  writeFileSync(join(outDir, 'github-stats.svg'), buildStatsSvg(context));
+  writeFileSync(join(outDir, 'top-languages.svg'), buildLanguagesSvg(context));
+  writeFileSync(join(outDir, 'github-trophies.svg'), buildTrophiesSvg(context));
+  writeFileSync(join(outDir, 'top-contributed-repo.svg'), buildRepoSvg(context));
+  writeFileSync(join(outDir, 'leetcode-progress.svg'), buildLeetCodeSvg(leetCodeStats));
 }
 
 build().catch((error) => {

@@ -10,6 +10,16 @@
 
 I’m a developer who loves building clean, scalable web applications and bringing ideas to life through code.
 
+## 🐍 Contribution Graph (Snack)
+
+<div align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/D162005/D162005/output/github-contribution-grid-snake-dark.svg" />
+    <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/D162005/D162005/output/github-contribution-grid-snake.svg" />
+    <img alt="github contribution grid snake animation" src="https://raw.githubusercontent.com/D162005/D162005/output/github-contribution-grid-snake.svg" />
+  </picture>
+</div>
+
 ## 👨‍💻 About Me
 
 I’m currently working on **MERN Stack projects**, full-stack web applications, and continuous open-source contributions.
@@ -42,21 +52,11 @@ I’m currently working on **MERN Stack projects**, full-stack web applications,
 ![AWS](https://img.shields.io/badge/AWS-232F3E?style=for-the-badge&logo=amazonaws&logoColor=white)
 ![Firebase](https://img.shields.io/badge/Firebase-FFCA28?style=for-the-badge&logo=firebase&logoColor=black)
 
-## 📊 GitHub Analytics
+## 📊 Professional GitHub Snapshot
 
-![GitHub Stats](https://raw.githubusercontent.com/D162005/D162005/output/assets/github-stats.svg)
+![Professional GitHub Snapshot](https://raw.githubusercontent.com/D162005/D162005/output/assets/github-stats.svg)
 
-![Top Languages](https://raw.githubusercontent.com/D162005/D162005/output/assets/top-languages.svg)
-
-## 🐍 Contribution Snake
-
-<div align="center">
-  <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/D162005/D162005/output/github-contribution-grid-snake-dark.svg" />
-    <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/D162005/D162005/output/github-contribution-grid-snake.svg" />
-    <img alt="github contribution grid snake animation" src="https://raw.githubusercontent.com/D162005/D162005/output/github-contribution-grid-snake.svg" />
-  </picture>
-</div>
+![Top Languages Spotlight](https://raw.githubusercontent.com/D162005/D162005/output/assets/top-languages.svg)
 
 ## 🏆 GitHub Trophies
 
@@ -68,7 +68,7 @@ I’m currently working on **MERN Stack projects**, full-stack web applications,
 
 ## 🧠 LeetCode Progress
 
-![LeetCode Stats](https://leetcard.jacoblin.cool/D_16?theme=dark&font=Fira%20Code&ext=contest)
+![LeetCode Progress Dashboard](https://raw.githubusercontent.com/D162005/D162005/output/assets/leetcode-progress.svg)
 
 ## ✍️ Random Dev Quote
 
