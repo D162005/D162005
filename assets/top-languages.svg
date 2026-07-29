@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="280" viewBox="0 0 960 280" role="img" aria-label="Top Languages">
+  <defs>
+    <linearGradient id="bg" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0%" stop-color="#0b1220" />
+      <stop offset="100%" stop-color="#0f1729" />
+    </linearGradient>
+    <linearGradient id="accent" x1="0" x2="1" y1="0" y2="0">
+      <stop offset="0%" stop-color="#38bdf8" />
+      <stop offset="100%" stop-color="#34d399" />
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="12" stdDeviation="18" flood-color="#000000" flood-opacity="0.35" />
+    </filter>
+  </defs>
+  <rect width="100%" height="100%" rx="24" fill="url(#bg)" />
+  <rect x="24" y="24" width="912" height="232" rx="20" fill="#111827" stroke="rgba(148,163,184,0.16)" filter="url(#shadow)" />
+  <rect x="48" y="42" width="120" height="4" rx="2" fill="url(#accent)" />
+  <text x="48" y="78" fill="#e5eef7" font-family="Segoe UI, Inter, Arial, sans-serif" font-size="28" font-weight="700">Top Languages</text>
+  <text x="48" y="108" fill="#8aa0b8" font-family="Segoe UI, Inter, Arial, sans-serif" font-size="14">D162005/D162005 language usage</text>
+  
+        <text x="58" y="152" fill="#e5eef7" font-family="Segoe UI, Inter, Arial, sans-serif" font-size="18" font-weight="600">JavaScript</text>
+        <text x="318" y="152" fill="#8aa0b8" font-family="Segoe UI, Inter, Arial, sans-serif" font-size="14">96%</text>
+        <rect x="58" y="162" width="580" height="10" rx="5" fill="#1f2937" />
+        <rect x="58" y="162" width="558" height="10" rx="5" fill="#38bdf8" />
+        <text x="652" y="172" fill="#8aa0b8" font-family="Segoe UI, Inter, Arial, sans-serif" font-size="12">2,677,361 bytes</text>
+        <text x="58" y="188" fill="#e5eef7" font-family="Segoe UI, Inter, Arial, sans-serif" font-size="18" font-weight="600">CSS</text>
+        <text x="318" y="188" fill="#8aa0b8" font-family="Segoe UI, Inter, Arial, sans-serif" font-size="14">2%</text>
+        <rect x="58" y="198" width="580" height="10" rx="5" fill="#1f2937" />
+        <rect x="58" y="198" width="11" height="10" rx="5" fill="#34d399" />
+        <text x="652" y="208" fill="#8aa0b8" font-family="Segoe UI, Inter, Arial, sans-serif" font-size="12">53,766 bytes</text>
+        <text x="58" y="224" fill="#e5eef7" font-family="Segoe UI, Inter, Arial, sans-serif" font-size="18" font-weight="600">SCSS</text>
+        <text x="318" y="224" fill="#8aa0b8" font-family="Segoe UI, Inter, Arial, sans-serif" font-size="14">1%</text>
+        <rect x="58" y="234" width="580" height="10" rx="5" fill="#1f2937" />
+        <rect x="58" y="234" width="8" height="10" rx="5" fill="#a78bfa" />
+        <text x="652" y="244" fill="#8aa0b8" font-family="Segoe UI, Inter, Arial, sans-serif" font-size="12">22,325 bytes</text>
+        <text x="58" y="260" fill="#e5eef7" font-family="Segoe UI, Inter, Arial, sans-serif" font-size="18" font-weight="600">HTML</text>
+        <text x="318" y="260" fill="#8aa0b8" font-family="Segoe UI, Inter, Arial, sans-serif" font-size="14">1%</text>
+        <rect x="58" y="270" width="580" height="10" rx="5" fill="#1f2937" />
+        <rect x="58" y="270" width="8" height="10" rx="5" fill="#fbbf24" />
+        <text x="652" y="280" fill="#8aa0b8" font-family="Segoe UI, Inter, Arial, sans-serif" font-size="12">21,738 bytes</text>
+        <text x="58" y="296" fill="#e5eef7" font-family="Segoe UI, Inter, Arial, sans-serif" font-size="18" font-weight="600">Python</text>
+        <text x="318" y="296" fill="#8aa0b8" font-family="Segoe UI, Inter, Arial, sans-serif" font-size="14">0%</text>
+        <rect x="58" y="306" width="580" height="10" rx="5" fill="#1f2937" />
+        <rect x="58" y="306" width="8" height="10" rx="5" fill="#fb7185" />
+        <text x="652" y="316" fill="#8aa0b8" font-family="Segoe UI, Inter, Arial, sans-serif" font-size="12">3,413 bytes</text>
+</svg>
