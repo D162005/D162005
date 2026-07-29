@@ -1,6 +1,6 @@
 <div align="center">
 
-# 🚀 Hi 👋, I'm **Darshan Patil** ✨
+#  Hi 👋, I'm **Darshan Patil** ✨
 
 *Building the future with code, one line at a time*
 
@@ -44,10 +44,10 @@ I’m currently working on **MERN Stack projects**, full-stack web applications,
 
 ## 📊 GitHub Analytics
 
-![GitHub Stats](https://github-readme-stats.vercel.app/api?username=d162005&theme=tokyonight&show_icons=true&hide_border=true&count_private=true&include_all_commits=true)
+![GitHub Stats](https://github-readme-stats.vercel.app/api?username=d162005&theme=tokyonight&show_icons=true&hide_border=true&count_private=true&include_all_commits=true&cache_seconds=86400)
 ![GitHub Streak](https://github-readme-streak-stats.herokuapp.com/?user=d162005&theme=tokyonight&hide_border=true)
 
-![Top Languages](https://github-readme-stats.vercel.app/api/top-langs/?username=d162005&layout=compact&theme=tokyonight&hide_border=true&langs_count=8)
+![Top Languages](https://github-readme-stats.vercel.app/api/top-langs/?username=d162005&layout=compact&theme=tokyonight&hide_border=true&langs_count=8&cache_seconds=86400)
 
 ## 🐍 Contribution Snake
 
@@ -61,11 +61,11 @@ I’m currently working on **MERN Stack projects**, full-stack web applications,
 
 ## 🏆 GitHub Trophies
 
-![GitHub Trophies](https://github-profile-trophy.vercel.app/?username=d162005&theme=tokyonight&no-frame=false&no-bg=true&margin-w=4)
+![GitHub Trophies](https://github-profile-trophy.vercel.app/?username=d162005&theme=tokyonight&no-frame=false&no-bg=true&margin-w=4&cache_seconds=86400)
 
 ## 🔝 Top Contributed Repo
 
-![Top Contributed Repo](https://github-contributor-stats.vercel.app/api?username=d162005&limit=5&theme=tokyonight&combine_all_yearly_contributions=true)
+![Top Contributed Repo](https://github-contributor-stats.vercel.app/api?username=d162005&limit=5&theme=tokyonight&combine_all_yearly_contributions=true&cache_seconds=86400)
 
 ## 🧠 LeetCode Progress
 
