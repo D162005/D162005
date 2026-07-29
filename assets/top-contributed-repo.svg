@@ -1,28 +1,46 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" width="960" height="280" viewBox="0 0 960 280" role="img" aria-label="Top Contributed Repo">
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="320" viewBox="0 0 960 320" role="img" aria-label="Top Contribution Repositories">
   <defs>
     <linearGradient id="bg" x1="0" x2="1" y1="0" y2="1">
-      <stop offset="0%" stop-color="#0b1220" />
-      <stop offset="100%" stop-color="#0f1729" />
+      <stop offset="0%" stop-color="#07101f" />
+      <stop offset="100%" stop-color="#0f172a" />
     </linearGradient>
-    <linearGradient id="accent" x1="0" x2="1" y1="0" y2="0">
-      <stop offset="0%" stop-color="#38bdf8" />
+    <linearGradient id="accentA" x1="0" x2="1" y1="0" y2="0">
+      <stop offset="0%" stop-color="#22d3ee" />
       <stop offset="100%" stop-color="#34d399" />
     </linearGradient>
-    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
-      <feDropShadow dx="0" dy="12" stdDeviation="18" flood-color="#000000" flood-opacity="0.35" />
+    <linearGradient id="accentB" x1="0" x2="1" y1="0" y2="0">
+      <stop offset="0%" stop-color="#f59e0b" />
+      <stop offset="100%" stop-color="#ef4444" />
+    </linearGradient>
+    <linearGradient id="accentC" x1="0" x2="1" y1="0" y2="0">
+      <stop offset="0%" stop-color="#a78bfa" />
+      <stop offset="100%" stop-color="#38bdf8" />
+    </linearGradient>
+    <filter id="soft">
+      <feDropShadow dx="0" dy="10" stdDeviation="12" flood-color="#000" flood-opacity="0.35" />
     </filter>
   </defs>
   <rect width="100%" height="100%" rx="24" fill="url(#bg)" />
-  <rect x="24" y="24" width="912" height="232" rx="20" fill="#111827" stroke="rgba(148,163,184,0.16)" filter="url(#shadow)" />
-  <rect x="48" y="42" width="120" height="4" rx="2" fill="url(#accent)" />
-  <text x="48" y="78" fill="#e5eef7" font-family="Segoe UI, Inter, Arial, sans-serif" font-size="28" font-weight="700">Top Contributed Repo</text>
-  <text x="48" y="108" fill="#8aa0b8" font-family="Segoe UI, Inter, Arial, sans-serif" font-size="14">Featured public repository</text>
+  <rect x="20" y="20" width="920" height="280" rx="22" fill="#101b2f" stroke="rgba(148,163,184,0.25)" filter="url(#soft)" />
+  <rect x="46" y="46" width="132" height="4" rx="2" fill="url(#accentA)" />
+  <text x="46" y="84" fill="#f8fafc" font-family="Segoe UI, Inter, Arial, sans-serif" font-size="30" font-weight="700">Top Contribution Repositories</text>
+  <text x="46" y="112" fill="#8aa0b8" font-family="Segoe UI, Inter, Arial, sans-serif" font-size="14">Two compact featured repositories</text>
   
-          <text x="58" y="152" fill="#e5eef7" font-family="Segoe UI, Inter, Arial, sans-serif" font-size="26" font-weight="700">D_NetViz_3D</text>
-          <text x="58" y="184" fill="#8aa0b8" font-family="Segoe UI, Inter, Arial, sans-serif" font-size="15">Interactive 3D network visualization platform for learning and visualiz…</text>
-          <text x="58" y="224" fill="#34d399" font-family="Segoe UI, Inter, Arial, sans-serif" font-size="14" font-weight="600">1 stars</text>
-          <text x="188" y="224" fill="#8aa0b8" font-family="Segoe UI, Inter, Arial, sans-serif" font-size="14">JavaScript</text>
-          <text x="320" y="224" fill="#8aa0b8" font-family="Segoe UI, Inter, Arial, sans-serif" font-size="14">Updated Jun 30, 2026</text>
-        
+    <g>
+      <rect x="46" y="138" width="412" height="142" rx="16" fill="#0d1628" stroke="rgba(148,163,184,0.25)" />
+      <text x="66" y="172" fill="#e2e8f0" font-family="Segoe UI, Inter, Arial, sans-serif" font-size="22" font-weight="700">D_NetViz_3D</text>
+      <text x="66" y="198" fill="#8aa0b8" font-family="Segoe UI, Inter, Arial, sans-serif" font-size="13">Interactive 3D network visualization platform f...</text>
+      <text x="66" y="232" fill="#34d399" font-family="Segoe UI, Inter, Arial, sans-serif" font-size="13" font-weight="700">1 stars</text>
+      <text x="174" y="232" fill="#60a5fa" font-family="Segoe UI, Inter, Arial, sans-serif" font-size="13">JavaScript</text>
+      <text x="296" y="232" fill="#94a3b8" font-family="Segoe UI, Inter, Arial, sans-serif" font-size="13">Jun 30, 2026</text>
+    </g>
+    <g>
+      <rect x="484" y="138" width="412" height="142" rx="16" fill="#0d1628" stroke="rgba(148,163,184,0.25)" />
+      <text x="504" y="172" fill="#e2e8f0" font-family="Segoe UI, Inter, Arial, sans-serif" font-size="22" font-weight="700">Moodify</text>
+      <text x="504" y="198" fill="#8aa0b8" font-family="Segoe UI, Inter, Arial, sans-serif" font-size="13">Moodify is a full-stack web app that uses webca...</text>
+      <text x="504" y="232" fill="#34d399" font-family="Segoe UI, Inter, Arial, sans-serif" font-size="13" font-weight="700">1 stars</text>
+      <text x="612" y="232" fill="#60a5fa" font-family="Segoe UI, Inter, Arial, sans-serif" font-size="13">JavaScript</text>
+      <text x="734" y="232" fill="#94a3b8" font-family="Segoe UI, Inter, Arial, sans-serif" font-size="13">Jul 9, 2026</text>
+    </g>
 </svg>
