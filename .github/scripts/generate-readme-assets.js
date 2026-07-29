@@ -132,7 +132,7 @@ function percentOf(value, max) {
   return Math.max(0, Math.min(100, Math.round((value / max) * 100)));
 }
 
-function ringProgress(cx, cy, radius, percent, color, valueText, labelText, id) {
+function ringProgress(cx, cy, radius, percent, valueText, labelText, id) {
   const circumference = 2 * Math.PI * radius;
   const dash = (Math.max(0, Math.min(100, percent)) / 100) * circumference;
   return `
@@ -140,7 +140,7 @@ function ringProgress(cx, cy, radius, percent, color, valueText, labelText, id) 
       <circle cx="${cx}" cy="${cy}" r="${radius}" fill="none" stroke="rgba(148,163,184,0.18)" stroke-width="12" />
       <circle cx="${cx}" cy="${cy}" r="${radius}" fill="none" stroke="url(#${id})" stroke-width="12" stroke-linecap="round" transform="rotate(-90 ${cx} ${cy})" stroke-dasharray="${dash} ${circumference}" />
       <text x="${cx}" y="${cy + 8}" text-anchor="middle" fill="#e2e8f0" font-family="Segoe UI, Inter, Arial, sans-serif" font-size="34" font-weight="700">${escapeXml(valueText)}</text>
-      <text x="${cx}" y="${cy + 32}" text-anchor="middle" fill="#8aa0b8" font-family="Segoe UI, Inter, Arial, sans-serif" font-size="12" letter-spacing="0.06em">${escapeXml(labelText.toUpperCase())}</text>
+      <text x="${cx}" y="${cy + radius + 28}" text-anchor="middle" fill="#8aa0b8" font-family="Segoe UI, Inter, Arial, sans-serif" font-size="12" letter-spacing="0.06em">${escapeXml(labelText.toUpperCase())}</text>
     </g>`;
 }
 
@@ -181,12 +181,12 @@ function buildStatsSvg(context) {
   const { user, publicRepos, totalStars, totalForks } = context;
   const maxValue = Math.max(user.public_repos || 0, user.followers || 0, totalStars || 0, totalForks || 0, 1);
   const body = `
-    ${ringProgress(160, 220, 62, percentOf(user.public_repos || 0, maxValue), '#22d3ee', formatNumber(user.public_repos || 0), 'Public Repos', 'accentA')}
-    ${ringProgress(390, 220, 62, percentOf(user.followers || 0, maxValue), '#a78bfa', formatNumber(user.followers || 0), 'Followers', 'accentC')}
-    ${ringProgress(620, 220, 62, percentOf(totalStars || 0, maxValue), '#34d399', formatNumber(totalStars || 0), 'Total Stars', 'accentA')}
-    ${ringProgress(850, 220, 62, percentOf(totalForks || 0, maxValue), '#f59e0b', formatNumber(totalForks || 0), 'Total Forks', 'accentB')}
+    ${ringProgress(160, 214, 62, percentOf(user.public_repos || 0, maxValue), formatNumber(user.public_repos || 0), 'Public Repos', 'accentA')}
+    ${ringProgress(390, 214, 62, percentOf(user.followers || 0, maxValue), formatNumber(user.followers || 0), 'Followers', 'accentC')}
+    ${ringProgress(620, 214, 62, percentOf(totalStars || 0, maxValue), formatNumber(totalStars || 0), 'Total Stars', 'accentA')}
+    ${ringProgress(850, 214, 62, percentOf(totalForks || 0, maxValue), formatNumber(totalForks || 0), 'Total Forks', 'accentB')}
   `;
-  return shell('Professional GitHub Snapshot', `${ownerRepo} key metrics`, body, 330);
+  return shell('GitHub Snapshot', `${ownerRepo} key metrics`, body, 340);
 }
 
 function buildLanguagesSvg(context) {
@@ -194,27 +194,27 @@ function buildLanguagesSvg(context) {
   const totalLanguageBytes = context.totalLanguageBytes;
   const rows = sortedLanguages.length > 0
     ? sortedLanguages.map(([language, bytes], index) => {
-      const rowY = 146 + index * 28;
-      const barWidth = Math.max(14, Math.round((bytes / Math.max(totalLanguageBytes, 1)) * 540));
+      const rowY = 188 + index * 30;
+      const barWidth = Math.max(14, Math.round((bytes / Math.max(totalLanguageBytes, 1)) * 500));
       const pct = percentOf(bytes, Math.max(totalLanguageBytes, 1));
       const colors = ['#22d3ee', '#34d399', '#a78bfa', '#f59e0b', '#fb7185', '#60a5fa'];
       return `
       <g>
         <circle cx="64" cy="${rowY - 5}" r="8" fill="${colors[index % colors.length]}" />
         <text x="84" y="${rowY}" fill="#e2e8f0" font-family="Segoe UI, Inter, Arial, sans-serif" font-size="16" font-weight="600">${escapeXml(language)}</text>
-        <rect x="250" y="${rowY - 14}" width="560" height="12" rx="6" fill="rgba(148,163,184,0.22)"/>
+        <rect x="250" y="${rowY - 14}" width="500" height="12" rx="6" fill="rgba(148,163,184,0.22)"/>
         <rect x="250" y="${rowY - 14}" width="${barWidth}" height="12" rx="6" fill="${colors[index % colors.length]}"/>
-        <text x="826" y="${rowY}" fill="#8aa0b8" font-family="Segoe UI, Inter, Arial, sans-serif" font-size="13">${pct}%</text>
+        <text x="770" y="${rowY}" fill="#8aa0b8" font-family="Segoe UI, Inter, Arial, sans-serif" font-size="13">${pct}%</text>
       </g>`;
     }).join('')
     : '<text x="46" y="176" fill="#8aa0b8" font-family="Segoe UI, Inter, Arial, sans-serif" font-size="18">No language data available.</text>';
 
   const body = `
-    <text x="46" y="136" fill="#34d399" font-family="Segoe UI, Inter, Arial, sans-serif" font-size="13" font-weight="700" letter-spacing="0.08em">ATTENTION RADAR</text>
+    <text x="46" y="148" fill="#34d399" font-family="Segoe UI, Inter, Arial, sans-serif" font-size="13" font-weight="700" letter-spacing="0.08em">LANGUAGE DISTRIBUTION</text>
     ${rows}
   `;
 
-  return shell('Top Languages Spotlight', 'Most used languages across your repositories', body, 340);
+  return shell('Top Languages Spotlight', 'Most used languages across your repositories', body, 380);
 }
 
 function buildTrophiesSvg(context) {
@@ -224,13 +224,13 @@ function buildTrophiesSvg(context) {
   const maxValue = Math.max(trophyScore, bestRepoStars, user.followers || 0, 1);
 
   const body = `
-    ${ringProgress(220, 220, 66, percentOf(trophyScore, maxValue), '#f59e0b', formatNumber(trophyScore), 'Achievement Score', 'accentB')}
-    ${ringProgress(480, 220, 66, percentOf(bestRepoStars, maxValue), '#34d399', formatNumber(bestRepoStars), 'Best Repo Stars', 'accentA')}
-    ${ringProgress(740, 220, 66, percentOf(user.followers || 0, maxValue), '#38bdf8', formatNumber(user.followers || 0), 'Followers', 'accentC')}
-    <text x="46" y="310" fill="#8aa0b8" font-family="Segoe UI, Inter, Arial, sans-serif" font-size="13">If any value is zero, it is shown as 0 (not hidden).</text>
+    ${ringProgress(220, 206, 66, percentOf(trophyScore, maxValue), formatNumber(trophyScore), 'Achievement Score', 'accentB')}
+    ${ringProgress(480, 206, 66, percentOf(bestRepoStars, maxValue), formatNumber(bestRepoStars), 'Best Repo Stars', 'accentA')}
+    ${ringProgress(740, 206, 66, percentOf(user.followers || 0, maxValue), formatNumber(user.followers || 0), 'Followers', 'accentC')}
+    <text x="46" y="324" fill="#8aa0b8" font-family="Segoe UI, Inter, Arial, sans-serif" font-size="13">If any value is zero, it is shown as 0 (not hidden).</text>
   `;
 
-  return shell('GitHub Trophies Circle View', 'Professional profile highlights in a circular layout', body, 350);
+  return shell('GitHub Tropies', 'Professional profile highlights in a circular layout', body, 360);
 }
 
 function buildRepoSvg(context) {
@@ -247,14 +247,16 @@ function buildRepoSvg(context) {
     }
 
     return `
-    <g>
-      <rect x="${x}" y="138" width="412" height="142" rx="16" fill="#0d1628" stroke="rgba(148,163,184,0.25)" />
-      <text x="${x + 20}" y="172" fill="#e2e8f0" font-family="Segoe UI, Inter, Arial, sans-serif" font-size="22" font-weight="700">${escapeXml(truncate(repo.name, 24))}</text>
-      <text x="${x + 20}" y="198" fill="#8aa0b8" font-family="Segoe UI, Inter, Arial, sans-serif" font-size="13">${escapeXml(truncate(repo.description || 'No description provided.', 48))}</text>
-      <text x="${x + 20}" y="232" fill="#34d399" font-family="Segoe UI, Inter, Arial, sans-serif" font-size="13" font-weight="700">${formatNumber(repo.stargazers_count || 0)} stars</text>
-      <text x="${x + 128}" y="232" fill="#60a5fa" font-family="Segoe UI, Inter, Arial, sans-serif" font-size="13">${escapeXml(repo.language || 'Unknown')}</text>
-      <text x="${x + 250}" y="232" fill="#94a3b8" font-family="Segoe UI, Inter, Arial, sans-serif" font-size="13">${new Date(repo.updated_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</text>
-    </g>`;
+    <a href="${escapeXml(repo.html_url)}" target="_blank" rel="noopener noreferrer">
+      <g style="cursor:pointer;">
+        <rect x="${x}" y="138" width="412" height="142" rx="16" fill="#0d1628" stroke="rgba(148,163,184,0.25)" />
+        <text x="${x + 20}" y="172" fill="#e2e8f0" font-family="Segoe UI, Inter, Arial, sans-serif" font-size="22" font-weight="700">${escapeXml(truncate(repo.name, 24))}</text>
+        <text x="${x + 20}" y="198" fill="#8aa0b8" font-family="Segoe UI, Inter, Arial, sans-serif" font-size="13">${escapeXml(truncate(repo.description || 'No description provided.', 48))}</text>
+        <text x="${x + 20}" y="232" fill="#34d399" font-family="Segoe UI, Inter, Arial, sans-serif" font-size="13" font-weight="700">${formatNumber(repo.stargazers_count || 0)} stars</text>
+        <text x="${x + 128}" y="232" fill="#60a5fa" font-family="Segoe UI, Inter, Arial, sans-serif" font-size="13">${escapeXml(repo.language || 'Unknown')}</text>
+        <text x="${x + 250}" y="232" fill="#94a3b8" font-family="Segoe UI, Inter, Arial, sans-serif" font-size="13">${new Date(repo.updated_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</text>
+      </g>
+    </a>`;
   }).join('');
 
   return shell('Top Contribution Repositories', 'Two compact featured repositories', cards, 320);
@@ -269,7 +271,7 @@ function buildLeetCodeSvg(stats) {
   const completion = percentOf(total, goal);
 
   const body = `
-    ${ringProgress(180, 220, 70, completion, '#f59e0b', formatNumber(total), 'Solved', 'accentB')}
+    ${ringProgress(180, 214, 70, completion, formatNumber(total), 'Solved', 'accentB')}
     <g>
       <text x="330" y="170" fill="#34d399" font-family="Segoe UI, Inter, Arial, sans-serif" font-size="13" font-weight="700">EASY</text>
       <rect x="330" y="178" width="520" height="12" rx="6" fill="rgba(148,163,184,0.2)"/>
@@ -289,7 +291,7 @@ function buildLeetCodeSvg(stats) {
     <text x="46" y="312" fill="#8aa0b8" font-family="Segoe UI, Inter, Arial, sans-serif" font-size="13">Ranking: ${stats.ranking ? formatNumber(stats.ranking) : 'Not available'} | Reputation: ${stats.reputation ? formatNumber(stats.reputation) : 'Not available'}</text>
   `;
 
-  return shell('LeetCode Progress Dashboard', `${leetcodeUsername} challenge overview`, body, 350);
+  return shell('LeetCode Progress', `${leetcodeUsername} challenge overview`, body, 350);
 }
 
 async function build() {

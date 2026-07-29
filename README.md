@@ -52,13 +52,13 @@ I’m currently working on **MERN Stack projects**, full-stack web applications,
 ![AWS](https://img.shields.io/badge/AWS-232F3E?style=for-the-badge&logo=amazonaws&logoColor=white)
 ![Firebase](https://img.shields.io/badge/Firebase-FFCA28?style=for-the-badge&logo=firebase&logoColor=black)
 
-## 📊 Professional GitHub Snapshot
+## 📊 GitHub Snapshot
 
-![Professional GitHub Snapshot](https://raw.githubusercontent.com/D162005/D162005/output/assets/github-stats.svg)
+![GitHub Snapshot](https://raw.githubusercontent.com/D162005/D162005/output/assets/github-stats.svg)
 
 ![Top Languages Spotlight](https://raw.githubusercontent.com/D162005/D162005/output/assets/top-languages.svg)
 
-## 🏆 GitHub Trophies
+## 🏆 GitHub Tropies
 
 ![GitHub Trophies](https://raw.githubusercontent.com/D162005/D162005/output/assets/github-trophies.svg)
 
@@ -68,7 +68,7 @@ I’m currently working on **MERN Stack projects**, full-stack web applications,
 
 ## 🧠 LeetCode Progress
 
-![LeetCode Progress Dashboard](https://raw.githubusercontent.com/D162005/D162005/output/assets/leetcode-progress.svg)
+![LeetCode Progress](https://raw.githubusercontent.com/D162005/D162005/output/assets/leetcode-progress.svg)
 
 ## ✍️ Random Dev Quote
 
@@ -78,12 +78,12 @@ I’m currently working on **MERN Stack projects**, full-stack web applications,
 
 ## 🌐 Connect With Me
 
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-%230077B5.svg?logo=linkedin&logoColor=white)](https://www.linkedin.com/in/darshan-linked-in/)
-[![Discord](https://img.shields.io/badge/Discord-%237289DA.svg?logo=discord&logoColor=white)](https://discord.com/users/_d._16_)
-[![LeetCode](https://img.shields.io/badge/LeetCode-%23FFA116.svg?logo=leetcode&logoColor=black)](https://leetcode.com/u/D_16/)
-[![GitHub](https://img.shields.io/badge/GitHub-%23121011.svg?logo=github&logoColor=white)](https://github.com/D162005)
-[![Email](https://img.shields.io/badge/Email-D14836?logo=gmail&logoColor=white)](mailto:darshanmpatil16012005@gmail.com)
-[![Resume](https://img.shields.io/badge/Resume-PDF-red?logo=adobeacrobat&logoColor=white)](data/Darshan%20Patil%20Resume.pdf)
+<a href="https://www.linkedin.com/in/darshan-linked-in/" target="_blank" rel="noopener noreferrer"><img src="https://img.shields.io/badge/LinkedIn-%230077B5.svg?logo=linkedin&logoColor=white" alt="LinkedIn" /></a>
+<a href="https://discord.com/users/_d._16_" target="_blank" rel="noopener noreferrer"><img src="https://img.shields.io/badge/Discord-%237289DA.svg?logo=discord&logoColor=white" alt="Discord" /></a>
+<a href="https://leetcode.com/u/D_16/" target="_blank" rel="noopener noreferrer"><img src="https://img.shields.io/badge/LeetCode-%23FFA116.svg?logo=leetcode&logoColor=black" alt="LeetCode" /></a>
+<a href="https://github.com/D162005" target="_blank" rel="noopener noreferrer"><img src="https://img.shields.io/badge/GitHub-%23121011.svg?logo=github&logoColor=white" alt="GitHub" /></a>
+<a href="mailto:darshanmpatil16012005@gmail.com"><img src="https://img.shields.io/badge/Email-D14836?logo=gmail&logoColor=white" alt="Email" /></a>
+<a href="data/Darshan%20Patil%20Resume.pdf" target="_blank" rel="noopener noreferrer"><img src="https://img.shields.io/badge/Resume-PDF-red?logo=adobeacrobat&logoColor=white" alt="Resume" /></a>
 
 ---
 
