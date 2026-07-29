@@ -20,6 +20,8 @@ I’m a developer who loves building clean, scalable web applications and bringi
   </picture>
 </div>
 
+<img alt="contribution score" src="dist/assets/contribution-score.svg" />
+
 ## 👨‍💻 About Me
 
 I’m currently working on **MERN Stack projects**, full-stack web applications, and continuous open-source contributions.

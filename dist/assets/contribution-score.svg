@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="56" viewBox="0 0 960 56" role="img" aria-label="Contribution Score Line">
+  <text x="46" y="35" fill="#22d3ee" font-family="Segoe UI, Inter, Arial, sans-serif" font-size="18" font-weight="800">Contribution Score</text>
+  <text x="230" y="35" fill="#f8fafc" font-family="Segoe UI, Inter, Arial, sans-serif" font-size="18" font-weight="800">0</text>
+  <text x="278" y="35" fill="#8aa0b8" font-family="Segoe UI, Inter, Arial, sans-serif" font-size="18" font-weight="500">commits</text>
+  <line x1="46" y1="43" x2="300" y2="43" stroke="rgba(34,211,238,0.25)" stroke-width="2" stroke-linecap="round" />
+</svg>

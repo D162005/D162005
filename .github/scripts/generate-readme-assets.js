@@ -102,6 +102,80 @@ async function getLeetCodeStats(name) {
   }
 }
 
+async function getContributionStats(name) {
+  const now = new Date();
+  const from = new Date(now.getFullYear(), 0, 1).toISOString();
+  const to = now.toISOString();
+  const query = `
+    query userContributions($login: String!, $from: DateTime!, $to: DateTime!) {
+      user(login: $login) {
+        contributionsCollection(from: $from, to: $to) {
+          contributionCalendar {
+            totalContributions
+          }
+          totalCommitContributions
+          totalIssueContributions
+          totalPullRequestContributions
+          totalPullRequestReviewContributions
+        }
+      }
+    }
+  `;
+
+  const parseContributionTotal = async () => {
+    const response = await fetch(`https://github.com/users/${name}/contributions`, {
+      headers: {
+        'User-Agent': 'readme-assets-generator',
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(`GitHub contributions page failed: ${response.status}`);
+    }
+
+    const html = await response.text();
+    const match = html.match(/([\d,]+) contributions in the last year/i);
+    return match ? Number(match[1].replace(/,/g, '')) : 0;
+  };
+
+  try {
+    const response = await fetch('https://api.github.com/graphql', {
+      method: 'POST',
+      headers: {
+        ...githubHeaders,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ query, variables: { login: name, from, to } }),
+    });
+
+    if (!response.ok) {
+      throw new Error(`GitHub GraphQL failed: ${response.status}`);
+    }
+
+    const json = await response.json();
+    const data = json?.data?.user?.contributionsCollection;
+    const pageTotal = await parseContributionTotal().catch(() => 0);
+    const totalContributions = data?.contributionCalendar?.totalContributions || pageTotal || 0;
+
+    return {
+      total: totalContributions,
+      commits: data?.totalCommitContributions || 0,
+      issues: data?.totalIssueContributions || 0,
+      prs: data?.totalPullRequestContributions || 0,
+      reviews: data?.totalPullRequestReviewContributions || 0,
+    };
+  } catch {
+    const pageTotal = await parseContributionTotal().catch(() => 0);
+    return {
+      total: pageTotal,
+      commits: pageTotal,
+      issues: 0,
+      prs: 0,
+      reviews: 0,
+    };
+  }
+}
+
 function escapeXml(value) {
   return String(value)
     .replace(/&/g, '&amp;')
@@ -262,6 +336,21 @@ function buildRepoSvg(context) {
   return shell('Top Contribution Repositories', 'Two compact featured repositories', cards, 320);
 }
 
+function buildContributionScoreSvg(stats) {
+  const total = stats.total || 0;
+  const commits = stats.commits || 0;
+  const issues = stats.issues || 0;
+  const prs = stats.prs || 0;
+  const reviews = stats.reviews || 0;
+  const score = total + commits + issues + prs + reviews;
+  return `<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="56" viewBox="0 0 960 56" role="img" aria-label="Contribution Score Line">
+  <text x="46" y="35" fill="#22d3ee" font-family="Segoe UI, Inter, Arial, sans-serif" font-size="18" font-weight="800">Contribution Score</text>
+  <text x="229" y="35" fill="#f8fafc" font-family="Segoe UI, Inter, Arial, sans-serif" font-size="18" font-weight="800">${formatNumber(total)}</text>
+  <text x="248" y="35" fill="#8aa0b8" font-family="Segoe UI, Inter, Arial, sans-serif" font-size="18" font-weight="500">commits</text>
+</svg>`;
+}
+
 function buildLeetCodeSvg(stats) {
   const total = stats.total || 0;
   const easy = stats.easy || 0;
@@ -343,11 +432,13 @@ async function build() {
   };
 
   const leetCodeStats = await getLeetCodeStats(leetcodeUsername);
+  const contributionStats = await getContributionStats(username);
 
   writeFileSync(join(outDir, 'github-stats.svg'), buildStatsSvg(context));
   writeFileSync(join(outDir, 'top-languages.svg'), buildLanguagesSvg(context));
   writeFileSync(join(outDir, 'github-trophies.svg'), buildTrophiesSvg(context));
   writeFileSync(join(outDir, 'top-contributed-repo.svg'), buildRepoSvg(context));
+  writeFileSync(join(outDir, 'contribution-score.svg'), buildContributionScoreSvg(contributionStats));
   writeFileSync(join(outDir, 'leetcode-progress.svg'), buildLeetCodeSvg(leetCodeStats));
 }
 
