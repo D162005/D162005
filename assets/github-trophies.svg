@@ -37,8 +37,8 @@
     
     <g>
       <circle cx="480" cy="206" r="66" fill="none" stroke="rgba(148,163,184,0.18)" stroke-width="12" />
-      <circle cx="480" cy="206" r="66" fill="none" stroke="url(#accentA)" stroke-width="12" stroke-linecap="round" transform="rotate(-90 480 206)" stroke-dasharray="4.1469023027385274 414.6902302738527" />
-      <text x="480" y="214" text-anchor="middle" fill="#e2e8f0" font-family="Segoe UI, Inter, Arial, sans-serif" font-size="34" font-weight="700">1</text>
+      <circle cx="480" cy="206" r="66" fill="none" stroke="url(#accentA)" stroke-width="12" stroke-linecap="round" transform="rotate(-90 480 206)" stroke-dasharray="8.293804605477055 414.6902302738527" />
+      <text x="480" y="214" text-anchor="middle" fill="#e2e8f0" font-family="Segoe UI, Inter, Arial, sans-serif" font-size="34" font-weight="700">2</text>
       <text x="480" y="300" text-anchor="middle" fill="#8aa0b8" font-family="Segoe UI, Inter, Arial, sans-serif" font-size="12" letter-spacing="0.06em">BEST REPO STARS</text>
     </g>
     

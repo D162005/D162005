@@ -44,8 +44,8 @@
     
     <g>
       <circle cx="620" cy="214" r="62" fill="none" stroke="rgba(148,163,184,0.18)" stroke-width="12" />
-      <circle cx="620" cy="214" r="62" fill="none" stroke="url(#accentA)" stroke-width="12" stroke-linecap="round" transform="rotate(-90 620 214)" stroke-dasharray="268.7946674411427 389.55748904513433" />
-      <text x="620" y="222" text-anchor="middle" fill="#e2e8f0" font-family="Segoe UI, Inter, Arial, sans-serif" font-size="34" font-weight="700">9</text>
+      <circle cx="620" cy="214" r="62" fill="none" stroke="url(#accentA)" stroke-width="12" stroke-linecap="round" transform="rotate(-90 620 214)" stroke-dasharray="299.9592665647534 389.55748904513433" />
+      <text x="620" y="222" text-anchor="middle" fill="#e2e8f0" font-family="Segoe UI, Inter, Arial, sans-serif" font-size="34" font-weight="700">10</text>
       <text x="620" y="304" text-anchor="middle" fill="#8aa0b8" font-family="Segoe UI, Inter, Arial, sans-serif" font-size="12" letter-spacing="0.06em">TOTAL STARS</text>
     </g>
     
